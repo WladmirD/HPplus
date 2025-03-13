@@ -26,9 +26,22 @@ const ensurePatient = (req, res, next) => {
   res.redirect('/');
 };
 
+const ensureRole = (req, res, next, role) => {
+  if (Array.isArray(role)) {
+    if (role.includes(res.locals.user.role)) {
+      return true;
+    }
+  }
+  if (res.locals.user && res.locals.user.role === role) {
+    return true;
+  }
+  return false;
+};
+
 export const Auth = {
   ensureAuthenticated,
   ensureAdmin,
   ensureDoctor,
   ensurePatient,
+  ensureRole,
 };

@@ -10,7 +10,11 @@ router.get('/', patientController.listPatients);
 // Render patient registration page
 router.get(
   '/register',
-  Auth.ensureAdmin || Auth.ensureDoctor,
+  (req, res, next) => {
+    if (Auth.ensureRole(req, res, next, ['admin', 'doctor'])) {
+      next();
+    }
+  },
   patientController.renderRegisterPatient
 );
 
